@@ -1,0 +1,23 @@
+.stock-multi-select {
+    -ms-flex: 0 0 41.666667%;
+    -webkit-box-flex: 0;
+    flex: 0 0 41.666667%;
+    max-width: 41.666667%;
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    
+
+}
+
+
+
+@media (min-width: 768px) {
+.col-md-5 {
+    -ms-flex: 0 0 41.666667%;
+    -webkit-box-flex: 0;
+    flex: 0 0 41.666667%;
+    max-width: 49.99999%;
+
+}
+}
