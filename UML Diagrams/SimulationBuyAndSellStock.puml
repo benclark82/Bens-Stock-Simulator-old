@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+actor "User" as A
+participant "React GUI" as B
+participant "StockSimulation" as C
+participant "BuySellStockStrategy" as D
+
+A->B : Press Run()
+B->C : runSimulation()
+activate C
+C->D : shouldBuyStock()
+activate D
+D->C : return(5.00)
+deactivate D
+C->D : shouldSellStock()
+activate D
+D->C : return(7.00)
+deactivate D
+C->C : calculateGainOrLossAmt(
+@enduml

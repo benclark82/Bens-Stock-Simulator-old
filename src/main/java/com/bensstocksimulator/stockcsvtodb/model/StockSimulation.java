@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
 
+
 @Data
 public class StockSimulation {
     private DateRange dateRange;
@@ -16,48 +17,38 @@ public class StockSimulation {
     private List<StockPerformance> stockPerformanceList;
     private LocalDate startDate;
     private LocalDate endDate;
-    private boolean isInvested;
-    //1.00 is 100%
-    private static final float STARTAMT = 1.00f;
+
     //In decimal form. 100% would be 1.00
     private float totalGainOrLossAmtDecimal;
 
+    /**
+     * Iterates through each day in the date range specified, then iterates through each stock specified
+     * and runes strategy to see if we should buy or sell
+     */
     public void runSimulation() {
 
         Iterator<StockDay> stockDayIterator = stockDays.listIterator();
         Iterator<StockPerformance> stockPerformanceIterator = stockPerformanceList.listIterator();
         StockPerformance stockPerformance;
-        float gainOrLossAmt;
+        float shouldBuyStockValue = 0.0f;
+        float shouldSellStockValue = 0.0f;
 
         //for each day between startDate and endDate
         for(LocalDate date : dateRange.toList()) {
 
-            //TODO: Should this increment stock performance? (Idea is go through all stocksDays for that date
-            //      so we can see what our performance for the day was?)
             //for each stock day/stock performance
-            while(stockDayIterator.hasNext() && stockPerformanceIterator.hasNext()) {
+            while(stockDayIterator.hasNext()) {
 
                 stockPerformance = stockPerformanceIterator.next();
 
                 //if not invested
-                if (!isInvested) {
+                if (!stockPerformance.isInvested()) {
+                    // will return 0.0 if we don't buy, > 0.0 if we do buy
+                    shouldBuyStockValue = runNotInvestedStrategy(shouldBuyStockValue, stockPerformance);
 
-                    //check if we should buy
-                    if (stockBuySellStrategy.shouldBuyStock(stockDays, stockPerformance)) {
-                        isInvested = true;
-                        //set purchase price
-                    }
                 } else {
-                    //check if we should sell
-                    if (stockBuySellStrategy.shouldSellStock(stockDays, stockPerformance) > 0) {
-                        isInvested = false;
-
-                        //calculate gain or loss amount
-                        gainOrLossAmt = calculateGainOrLossAmount(STARTAMT, stockPerformance.getCurrentValue());
-                        totalGainOrLossAmtDecimal += gainOrLossAmt;
-                        stockPerformance.addGainOrLoss(gainOrLossAmt);
-
-                    }
+                    // will return 0.0 if we don't sell, > 0.0 if we do sell
+                    shouldSellStockValue = runAlreadyInvestedStrategy(shouldSellStockValue, stockPerformance);
                 }
             }
         }
@@ -68,4 +59,27 @@ public class StockSimulation {
 
         return gainOrLossAmt;
     }
+
+    private float runNotInvestedStrategy(float shouldBuyStockValue, StockPerformance stockPerformance) {
+        //check if we should buy
+        shouldBuyStockValue = stockBuySellStrategy.shouldBuyStock(stockDays, stockPerformance);
+        if(shouldBuyStockValue > 0.0f) {
+
+            stockPerformance.stockBought( shouldBuyStockValue );
+        }
+
+        return shouldBuyStockValue;
+    }
+
+    private float runAlreadyInvestedStrategy(float shouldSellStockValue, StockPerformance stockPerformance) {
+        //check if we should sell
+        shouldSellStockValue = stockBuySellStrategy.shouldSellStock(stockDays, stockPerformance);
+        if(shouldSellStockValue > 0.0f) {
+
+            stockPerformance.stockSold( shouldSellStockValue );
+        }
+
+        return shouldSellStockValue;
+    }
 }
+

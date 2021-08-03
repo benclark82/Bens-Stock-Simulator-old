@@ -21,6 +21,7 @@ public class StockDay {
     private float high;
     private float low;
     private float adjustedClose;
+    private float openCloseRangeAmt;
     private int volume;
 
     public StockDay() {
@@ -36,7 +37,9 @@ public class StockDay {
         this.high = high;
         this.low = low;
         this.adjustedClose = adjustedClose;
+        this.openCloseRangeAmt = Math.abs(close - open);
         this.volume = volume;
+
     }
 
     public Long getId() {
@@ -101,6 +104,14 @@ public class StockDay {
 
     public void setAdjustedClose(float adjustedClose) {
         this.adjustedClose = adjustedClose;
+    }
+
+    public float getOpenCloseRangeAmt() {
+        return openCloseRangeAmt;
+    }
+
+    public void setOpenCloseRangeAmt(float openCloseRangeAmt) {
+        this.openCloseRangeAmt = openCloseRangeAmt;
     }
 
     public int getVolume() {
