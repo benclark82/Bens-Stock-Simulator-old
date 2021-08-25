@@ -37,7 +37,7 @@ public class StockPerformance {
     }
 
     public void stockSold(float soldPrice) {
-        setTotalAmtSharesSold(getTotalAmtSharesSold()+getCurNumShares());
+        setTotalAmtSharesSold(getTotalAmtSharesSold() + getCurNumShares());
         setRunningGainOrLoss(getRunningGainOrLoss() + ((soldPrice - getBoughtPrice()) * getCurNumShares()));
         System.out.println("runningGainOrLoss: " + getRunningGainOrLoss());
         setBoughtPrice(0.0f);
@@ -45,6 +45,4 @@ public class StockPerformance {
         setCurNumShares(0);
         setInvested(false);
     }
-
-
 }

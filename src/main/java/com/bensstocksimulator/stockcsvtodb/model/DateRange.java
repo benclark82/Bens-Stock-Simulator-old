@@ -25,11 +25,12 @@ public class DateRange implements Iterable<LocalDate> {
                 .limit(ChronoUnit.DAYS.between(startDate, endDate) + 1);
     }
 
-    public List<LocalDate> toList() { //could also be built from the stream() method
+    public List<LocalDate> toList() {
         List<LocalDate> dates = new ArrayList<>();
         for (LocalDate d = startDate; !d.isAfter(endDate); d = d.plusDays(1)) {
             dates.add(d);
         }
+
         return dates;
     }
 }

@@ -4,18 +4,14 @@ import com.bensstocksimulator.stockcsvtodb.repository.StockDayRepository;
 import com.bensstocksimulator.stockcsvtodb.service.StockSimulationService;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -73,15 +69,15 @@ class StockSimulationTest {
         config.setStockTickers(new ArrayList<>(Arrays.asList("TEST")));
 
         strategy = new StockBuySellStrategy(config);
-        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 20),2.00f, 1.00f, 3.00f, 0.5f, 2.00f, 500));
-        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 21),1.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
-        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 22),2.00f, 3.00f, 3.00f, 0.5f, 3.00f, 500));
-        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 23),3.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
-        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 24),2.00f, 3.00f, 3.00f, 0.5f, 3.00f, 500));
-        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 25),3.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
-        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 26),2.00f, 1.00f, 2.00f, 0.5f, 1.00f, 500));
-        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 27),1.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
-        Mockito.when(repository.findByTickerAndDateBetween("TEST", LocalDate.of(2021, 05, 20), LocalDate.of(2021, 05, 27))).thenReturn(stockDaysList);
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 20),2.00f, 1.00f, 3.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 21),1.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 22),2.00f, 3.00f, 3.00f, 0.5f, 3.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 23),3.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 24),2.00f, 3.00f, 3.00f, 0.5f, 3.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 25),3.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 26),2.00f, 1.00f, 2.00f, 0.5f, 1.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 27),1.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
+        Mockito.when(repository.findByTickerAndDateBetween("TEST", LocalDate.of(2021, 5, 20), LocalDate.of(2021, 05, 27))).thenReturn(stockDaysList);
 
         performanceList = service.runSimulation(config);
         performance = performanceList.get(0);
@@ -106,15 +102,15 @@ class StockSimulationTest {
         config.setStockTickers(new ArrayList<>(Arrays.asList("TEST")));
 
         strategy = new StockBuySellStrategy(config);
-        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 20),2.00f, 1.00f, 3.00f, 0.5f, 2.00f, 500));
-        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 21),1.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
-        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 22),2.00f, 1.00f, 3.00f, 0.5f, 3.00f, 500));
-        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 23),2.00f, 1.00f, 3.00f, 0.5f, 2.00f, 500));
-        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 24),2.00f, 3.00f, 3.00f, 0.5f, 3.00f, 500));
-        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 25),3.00f, 3.00f, 3.00f, 0.5f, 2.00f, 500));
-        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 26),2.00f, 4.00f, 2.00f, 0.5f, 1.00f, 500));
-        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 27),1.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
-        Mockito.when(repository.findByTickerAndDateBetween("TEST", LocalDate.of(2021, 05, 20), LocalDate.of(2021, 05, 27))).thenReturn(stockDaysList);
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 20),2.00f, 1.00f, 3.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 21),1.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 22),2.00f, 1.00f, 3.00f, 0.5f, 3.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 23),2.00f, 1.00f, 3.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 24),2.00f, 3.00f, 3.00f, 0.5f, 3.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 25),3.00f, 3.00f, 3.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 26),2.00f, 4.00f, 2.00f, 0.5f, 1.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 27),1.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
+        Mockito.when(repository.findByTickerAndDateBetween("TEST", LocalDate.of(2021, 5, 20), LocalDate.of(2021, 05, 27))).thenReturn(stockDaysList);
 
         performanceList = service.runSimulation(config);
         performance = performanceList.get(0);

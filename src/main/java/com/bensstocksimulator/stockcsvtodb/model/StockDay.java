@@ -2,8 +2,6 @@ package com.bensstocksimulator.stockcsvtodb.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.UUID;
 
 /**
  * Holds daily stock data
@@ -13,19 +11,18 @@ import java.util.UUID;
 public class StockDay {
     @Id
     private String id;
-
     private String ticker;
     private LocalDate date;
     private float open;
     private float close;
     private float high;
     private float low;
-    @Column(name="adjusted_close")
+    @Column(name = "adjusted_close")
     private float adjustedClose;
-    @Column(name="open_close_difference")
+    @Column(name = "open_close_difference")
     private float openCloseDifference;
     //Absolute value of the open close difference
-    @Column(name="open_close_range_amt")
+    @Column(name = "open_close_range_amt")
     private float openCloseRangeAmt;
     private long volume;
 
@@ -47,20 +44,8 @@ public class StockDay {
         this.openCloseRangeAmt = Math.abs(openCloseDifference);
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getTicker() {
         return ticker;
-    }
-
-    public void setTicker(String ticker) {
-        this.ticker = ticker;
     }
 
     public LocalDate getDate() {
@@ -103,20 +88,8 @@ public class StockDay {
         this.low = low;
     }
 
-    public float getAdjustedClose() {
-        return adjustedClose;
-    }
-
-    public void setAdjustedClose(float adjustedClose) {
-        this.adjustedClose = adjustedClose;
-    }
-
     public float getOpenCloseRangeAmt() {
         return openCloseRangeAmt;
-    }
-
-    public void setOpenCloseRangeAmt(float openCloseRangeAmt) {
-        this.openCloseRangeAmt = Math.abs(openCloseRangeAmt);
     }
 
     public long getVolume() {
@@ -125,14 +98,6 @@ public class StockDay {
 
     public void setVolume(int volume) {
         this.volume = volume;
-    }
-
-    public float getOpenCloseDifference() {
-        return openCloseDifference;
-    }
-
-    public void setOpenCloseDifference(float openCloseDifference) {
-        this.openCloseDifference = openCloseDifference;
     }
 
     @Override

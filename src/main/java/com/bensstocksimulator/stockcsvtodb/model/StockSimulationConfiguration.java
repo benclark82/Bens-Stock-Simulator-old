@@ -12,9 +12,10 @@ import java.util.List;
 @Data
 @Configuration
 @EnableConfigurationProperties
-@ConfigurationProperties(prefix="simulation.config")
+@ConfigurationProperties(prefix = "simulation.config")
 public class StockSimulationConfiguration {
 
+    ArrayList<String> stockTickers;
     private boolean buyIfPreviouslyUp;
     private boolean buyIfPreviouslyDown;
     private boolean buyIfBullishHarami;
@@ -28,6 +29,4 @@ public class StockSimulationConfiguration {
     private int previousBuyDuration;
     private int previousSellDuration;
     private boolean loadCsvFiles;
-    ArrayList<String> stockTickers;
-
 }

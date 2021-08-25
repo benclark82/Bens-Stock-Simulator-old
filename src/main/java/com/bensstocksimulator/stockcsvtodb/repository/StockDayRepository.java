@@ -10,5 +10,6 @@ import java.util.List;
 
 @Repository
 public interface StockDayRepository extends JpaRepository<StockDay, Long> {
-    public ArrayList<StockDay> findByTickerAndDateBetween(String ticker, LocalDate startDate, LocalDate endDate);
+
+    ArrayList<StockDay> findByTickerAndDateBetween(String ticker, LocalDate startDate, LocalDate endDate);
 }

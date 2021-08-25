@@ -4,6 +4,7 @@ import com.bensstocksimulator.stockcsvtodb.helper.CSVHelper;
 import com.bensstocksimulator.stockcsvtodb.model.StockDay;
 import com.bensstocksimulator.stockcsvtodb.model.StockSimulationConfiguration;
 import com.bensstocksimulator.stockcsvtodb.repository.StockDayRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.List;
 
+@Slf4j
 @Service
 public class CSVService {
     private final StockDayRepository repository;
@@ -29,7 +31,7 @@ public class CSVService {
         this.resourcePatternResolver = resourcePatternResolver;
         this.simConfig = simConfig;
 
-        if(simConfig.isLoadCsvFiles())
+        if (simConfig.isLoadCsvFiles())
             this.loadAllCsvFiles();
     }
 
@@ -37,10 +39,16 @@ public class CSVService {
 
         String fileName = file.getOriginalFilename();
         String ticker = fileName.substring(0, fileName.indexOf('.'));
+
+        if(ticker == null) {
+            log.debug("Could not get ticker from filename: {}", fileName);
+            return;
+        }
+
         try {
             List<StockDay> stockDays = CSVHelper.csvToStockDay(file.getInputStream(), ticker);
             repository.saveAll(stockDays);
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException("failed to store csv data: " + e.getMessage());
         }
     }
@@ -53,7 +61,7 @@ public class CSVService {
         try {
             Resource[] resources = resourcePatternResolver.getResources("classpath:stocks/*.csv");
 
-            for (Resource resource: resources ) {
+            for (Resource resource : resources) {
                 System.out.println("Loading " + resource.getFile().getName());
                 input = new FileInputStream(resource.getFile());
 
@@ -66,7 +74,7 @@ public class CSVService {
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
-        assert(true);
+        assert (true);
 
     }
 
