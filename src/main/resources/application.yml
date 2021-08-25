@@ -1,0 +1,48 @@
+#allowPublicKeyRetrieval and useSSL settings can't be used in production
+spring:
+  datasource:
+    url:  jdbc:mysql://localhost:3306/stocksimulator?allowPublicKeyRetrieval=true&useSSL=false
+    username:  root
+    password:  2021GreenB@y!
+
+  jpa:
+    properties:
+      hibernate:
+        dialect:  org.hibernate.dialect.MySQL5InnoDBDialect
+
+  # Hibernate ddl auto (create, create-drop, validate, update)
+        ddl-auto: update
+
+  # Configure maximum file size
+
+  servlet:
+    multipart:  max-file-size=2MB
+                max-request-size=2MB
+
+  data:
+    rest:
+      base-path=/api:
+
+simulation:
+  config:
+    buyIfPreviouslyUp: false
+    buyIfPreviouslyDown: false
+    buyIfBullishHarami: false
+    buyIfBearishHarami: false
+    sellIfPreviouslyUp: false
+    sellIfPreviouslyDown: false
+    sellIfBullishHarami: false
+    sellIfBearishHarami: false
+    startDate: "2000-01-01"
+    endDate: "2020-01-01"
+    previousBuyDuration: 1
+    previousSellDuration: 1
+    loadCsvFiles: false
+    stocksTickers: ""
+
+logging:
+  level:
+    root: error
+    org.springframework.web: error
+    com.bensstocksimulator: debug
+    org.hibernate: error

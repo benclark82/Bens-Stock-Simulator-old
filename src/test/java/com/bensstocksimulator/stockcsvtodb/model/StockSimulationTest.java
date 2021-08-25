@@ -1,19 +1,126 @@
 package com.bensstocksimulator.stockcsvtodb.model;
 
+import com.bensstocksimulator.stockcsvtodb.repository.StockDayRepository;
+import com.bensstocksimulator.stockcsvtodb.service.StockSimulationService;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.MockitoRule;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 
+import static junit.framework.Assert.assertEquals;
+
+@RunWith(MockitoJUnitRunner.class)
 class StockSimulationTest {
 
-    @BeforeEach
-    void setUp() {
-        StockPerformance stockPerformance = new StockPerformance();
-        StockSimulation stockSimulation = new StockSimulation( );
+    @Rule
+    public MockitoRule initRule = MockitoJUnit.rule();
+
+    @Mock
+    StockSimulationConfiguration config;
+
+    @Mock
+    StockSimulationService service;
+
+    @Mock
+    StockDayRepository repository;
+
+    @Mock
+    ArrayList<StockDay> stockDaysList;
+
+    @Mock
+    ArrayList<StockPerformance> performanceList;
+
+    @Mock
+    StockPerformance performance;
+
+    @Mock
+    StockBuySellStrategy strategy;
+
+    @Before
+    public void init() {
+
+        MockitoAnnotations.initMocks(this);
+
     }
 
     @Test
-    void runSimulation() {
+    void runSimulation_BuyIfPreviouslyUp_SellIfPreviouslyDown() {
+        config = new StockSimulationConfiguration();
+        stockDaysList = new ArrayList<>();
+        repository = Mockito.mock(StockDayRepository.class);
+        service = new StockSimulationService(repository);
+
+        config.setBuyIfPreviouslyDown(true);
+        config.setSellIfPreviouslyUp(true);
+        config.setStartDate("2021-05-20");
+        config.setEndDate("2021-05-27");
+        config.setPreviousBuyDuration(1);
+        config.setPreviousSellDuration(1);
+        config.setStockTickers(new ArrayList<>(Arrays.asList("TEST")));
+
+        strategy = new StockBuySellStrategy(config);
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 20),2.00f, 1.00f, 3.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 21),1.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 22),2.00f, 3.00f, 3.00f, 0.5f, 3.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 23),3.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 24),2.00f, 3.00f, 3.00f, 0.5f, 3.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 25),3.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 26),2.00f, 1.00f, 2.00f, 0.5f, 1.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 27),1.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
+        Mockito.when(repository.findByTickerAndDateBetween("TEST", LocalDate.of(2021, 05, 20), LocalDate.of(2021, 05, 27))).thenReturn(stockDaysList);
+
+        performanceList = service.runSimulation(config);
+        performance = performanceList.get(0);
+
+        assertEquals(200.0f, performance.getRunningGainOrLoss());
+        assertEquals(100, performance.getCurNumShares());
+    }
+
+    @Test
+    void runSimulation_DurationTwoDays_BuyIfPreviouslyUp_SellIfPreviouslyDown() {
+        config = new StockSimulationConfiguration();
+        stockDaysList = new ArrayList<>();
+        repository = Mockito.mock(StockDayRepository.class);
+        service = new StockSimulationService(repository);
+
+        config.setBuyIfPreviouslyDown(true);
+        config.setSellIfPreviouslyUp(true);
+        config.setStartDate("2021-05-20");
+        config.setEndDate("2021-05-27");
+        config.setPreviousBuyDuration(2);
+        config.setPreviousSellDuration(2);
+        config.setStockTickers(new ArrayList<>(Arrays.asList("TEST")));
+
+        strategy = new StockBuySellStrategy(config);
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 20),2.00f, 1.00f, 3.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 21),1.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 22),2.00f, 1.00f, 3.00f, 0.5f, 3.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 23),2.00f, 1.00f, 3.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 24),2.00f, 3.00f, 3.00f, 0.5f, 3.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 25),3.00f, 3.00f, 3.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 26),2.00f, 4.00f, 2.00f, 0.5f, 1.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 05, 27),1.00f, 2.00f, 3.00f, 0.5f, 2.00f, 500));
+        Mockito.when(repository.findByTickerAndDateBetween("TEST", LocalDate.of(2021, 05, 20), LocalDate.of(2021, 05, 27))).thenReturn(stockDaysList);
+
+        performanceList = service.runSimulation(config);
+        performance = performanceList.get(0);
+
+        assertEquals(-100.0f, performance.getRunningGainOrLoss());
+        assertEquals(0, performance.getCurNumShares());
+
     }
 }

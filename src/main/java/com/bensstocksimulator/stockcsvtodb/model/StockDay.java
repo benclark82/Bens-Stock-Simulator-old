@@ -3,6 +3,7 @@ package com.bensstocksimulator.stockcsvtodb.model;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Holds daily stock data
@@ -11,8 +12,7 @@ import java.util.Date;
 @Table(name = "daily_stock_history")
 public class StockDay {
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
 
     private String ticker;
     private LocalDate date;
@@ -20,16 +20,21 @@ public class StockDay {
     private float close;
     private float high;
     private float low;
+    @Column(name="adjusted_close")
     private float adjustedClose;
+    @Column(name="open_close_difference")
+    private float openCloseDifference;
+    //Absolute value of the open close difference
+    @Column(name="open_close_range_amt")
     private float openCloseRangeAmt;
-    private int volume;
+    private long volume;
 
     public StockDay() {
     }
 
-    public StockDay(String ticker, LocalDate date,
-                    float open, float close, float high,
-                    float low, float adjustedClose, int volume) {
+    public StockDay(String ticker, LocalDate date, float open, float close, float high,
+                    float low, float adjustedClose, long volume) {
+        this.id = ticker.concat(date.toString());
         this.ticker = ticker;
         this.date = date;
         this.open = open;
@@ -37,16 +42,16 @@ public class StockDay {
         this.high = high;
         this.low = low;
         this.adjustedClose = adjustedClose;
-        this.openCloseRangeAmt = Math.abs(close - open);
         this.volume = volume;
-
+        this.openCloseDifference = open - close;
+        this.openCloseRangeAmt = Math.abs(openCloseDifference);
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -111,15 +116,23 @@ public class StockDay {
     }
 
     public void setOpenCloseRangeAmt(float openCloseRangeAmt) {
-        this.openCloseRangeAmt = openCloseRangeAmt;
+        this.openCloseRangeAmt = Math.abs(openCloseRangeAmt);
     }
 
-    public int getVolume() {
+    public long getVolume() {
         return volume;
     }
 
     public void setVolume(int volume) {
         this.volume = volume;
+    }
+
+    public float getOpenCloseDifference() {
+        return openCloseDifference;
+    }
+
+    public void setOpenCloseDifference(float openCloseDifference) {
+        this.openCloseDifference = openCloseDifference;
     }
 
     @Override

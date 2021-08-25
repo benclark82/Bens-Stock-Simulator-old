@@ -1,30 +1,33 @@
 package com.bensstocksimulator.stockcsvtodb.model;
 
 import lombok.Data;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
-@Component
+@Configuration
+@EnableConfigurationProperties
+@ConfigurationProperties(prefix="simulation.config")
 public class StockSimulationConfiguration {
 
-    public StockSimulationConfiguration() {
-        this.buyIfPreviousDayUp = false;
-        this.sellIfPreviousDayUp = false;
-        this.buyIfPreviousDayDown = false;
-        this.sellIfPreviousDayDown = false;
-        this.buyIfBullishHarami = false;
-        this.isSellIfBullishHarami = false;
-        this.buyIfBearishHarami = false;
-        this.sellIfBearishHarami = false;
-    }
-
-    private boolean buyIfPreviousDayUp;
-    private boolean sellIfPreviousDayUp;
-    private boolean buyIfPreviousDayDown;
-    private boolean sellIfPreviousDayDown;
+    private boolean buyIfPreviouslyUp;
+    private boolean buyIfPreviouslyDown;
     private boolean buyIfBullishHarami;
-    private boolean isSellIfBullishHarami;
     private boolean buyIfBearishHarami;
+    private boolean sellIfPreviouslyUp;
+    private boolean sellIfPreviouslyDown;
+    private boolean sellIfBullishHarami;
     private boolean sellIfBearishHarami;
+    private String startDate;
+    private String endDate;
+    private int previousBuyDuration;
+    private int previousSellDuration;
+    private boolean loadCsvFiles;
+    ArrayList<String> stockTickers;
 
 }

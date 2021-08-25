@@ -53,11 +53,9 @@ public class CSVHelper {
             CSVParser csvParser = new CSVParser(fileReader,
                     CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
 
-                        List<StockDay> stockDays = new ArrayList<StockDay>();
+                        List<StockDay> stockDays = new ArrayList<>();
 
-                        Iterable<CSVRecord> csvRecords = csvParser.getRecords();
-
-                        for (CSVRecord csvRecord : csvRecords) {
+                        for (CSVRecord csvRecord : csvParser) {
                             StockDay stockDay = new StockDay(
                                     ticker,
                                     LocalDate.parse(csvRecord.get("Date")),
@@ -66,7 +64,7 @@ public class CSVHelper {
                                     Float.parseFloat(csvRecord.get("Low")),
                                     Float.parseFloat(csvRecord.get("Close")),
                                     Float.parseFloat(csvRecord.get("Adj Close")),
-                                    Integer.parseInt(csvRecord.get("Volume"))
+                                    Long.parseLong(csvRecord.get("Volume"))
                             );
 
                             stockDays.add(stockDay);

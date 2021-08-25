@@ -1,16 +1,11 @@
 package com.bensstocksimulator.stockcsvtodb.model;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -24,8 +19,7 @@ class StockBuySellStrategyTest {
     @InjectMocks
     private  StockSimulationConfiguration stockSimConfig = new StockSimulationConfiguration();
     @InjectMocks
-    private StockBuySellStrategy strategy = new StockBuySellStrategy(stockSimConfig, 0.0f,
-            0.0f, 0.0f, 0.0f);
+    private StockBuySellStrategy strategy = new StockBuySellStrategy(stockSimConfig);
     @InjectMocks
     private StockPerformance performance = new StockPerformance();
 
@@ -46,7 +40,7 @@ class StockBuySellStrategyTest {
         //Setup today stockDay
         stockDays.add(new StockDay("AAPL", LocalDate.now(), 2.00f, 3.00f, 4.00f, 1.50f, 3.00f, 4000));
 
-        strategy.setStockBuyPrice(3.99f);
+        strategy.setBuyLimitPrice(3.99f);
         assertEquals(strategy.shouldBuyStock(stockDays, performance), 3.99f);
     }
 
@@ -57,7 +51,7 @@ class StockBuySellStrategyTest {
         //Setup today stockDay
         stockDays.add(new StockDay("AAPL", LocalDate.now(), 2.00f, 3.00f, 4.00f, 1.50f, 3.00f, 4000));
 
-        strategy.setStockBuyPrice(4.01f);
+        strategy.setBuyLimitPrice(4.01f);
         assertEquals(strategy.shouldBuyStock(stockDays, performance), 0.0f);
     }
 
