@@ -177,9 +177,16 @@ public class StockBuySellStrategy {
      * @return
      */
     public boolean bullishHaramiFound(List<StockDay> stockDays) {
-        StockDay twoDaysBeforeStockDay = stockDays.get(stockDays.size() - 3);
-        StockDay previousStockDay = stockDays.get(stockDays.size() - 2);
-        StockDay currentStockDay = stockDays.get(stockDays.size() - 1);
+        StockDay twoDaysBeforeStockDay;
+        StockDay previousStockDay;
+        StockDay currentStockDay;
+
+        if (stockDays.size() < 3)
+            return false;
+
+        twoDaysBeforeStockDay = stockDays.get(stockDays.size() - 3);
+        previousStockDay = stockDays.get(stockDays.size() - 2);
+        currentStockDay = stockDays.get(stockDays.size() - 1);
 
         //if stock is on a downward trend(2 or more days)
         if (previousStockDay.getClose() < twoDaysBeforeStockDay.getClose()) {
@@ -204,9 +211,16 @@ public class StockBuySellStrategy {
      * @return
      */
     public boolean bearishHaramiFound(List<StockDay> stockDays) {
-        StockDay twoDaysBeforeStockDay = stockDays.get(stockDays.size() - 3);
-        StockDay previousStockDay = stockDays.get(stockDays.size() - 2);
-        StockDay currentStockDay = stockDays.get(stockDays.size() - 1);
+        StockDay twoDaysBeforeStockDay;
+        StockDay previousStockDay;
+        StockDay currentStockDay;
+
+        if (stockDays.size() < 3)
+            return false;
+
+        twoDaysBeforeStockDay = stockDays.get(stockDays.size() - 3);
+        previousStockDay = stockDays.get(stockDays.size() - 2);
+        currentStockDay = stockDays.get(stockDays.size() - 1);
 
         //if stock is on an upward trend(2 or more days)
         if (previousStockDay.getClose() > twoDaysBeforeStockDay.getClose()) {

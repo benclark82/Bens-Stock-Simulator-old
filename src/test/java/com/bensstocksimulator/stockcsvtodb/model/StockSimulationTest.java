@@ -119,4 +119,36 @@ class StockSimulationTest {
         assertEquals(0, performance.getCurNumShares());
 
     }
+
+    @Test
+    void runSimulation_BuyIfBullishHarami_SellIfBearishHarami() {
+        config = new StockSimulationConfiguration();
+        stockDaysList = new ArrayList<>();
+        repository = Mockito.mock(StockDayRepository.class);
+        service = new StockSimulationService(repository);
+
+        config.setBuyIfBullishHarami(true);
+        config.setSellIfBearishHarami(true);
+        config.setStartDate("2021-05-20");
+        config.setEndDate("2021-05-27");
+        config.setPreviousBuyDuration(1);
+        config.setPreviousSellDuration(1);
+        config.setStockTickers(new ArrayList<>(Arrays.asList("TEST")));
+
+        strategy = new StockBuySellStrategy(config);
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 20),3.00f, 2.00f, 3.50f, 1.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 21),2.50f, 1.50f, 3.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 22),1.90f, 2.14f, 2.40f, 1.75f, 3.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 23),2.00f, 3.00f, 4.00f, 0.5f, 2.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 24),3.00f, 4.00f, 4.00f, 0.5f, 3.00f, 500));
+        stockDaysList.add(new StockDay("TEST", LocalDate.of(2021, 5, 25),3.40f, 3.60f, 3.60f, 0.5f, 2.00f, 500));
+        Mockito.when(repository.findByTickerAndDateBetween("TEST", LocalDate.of(2021, 5, 20), LocalDate.of(2021, 05, 27))).thenReturn(stockDaysList);
+
+        performanceList = service.runSimulation(config);
+        performance = performanceList.get(0);
+
+        assertEquals(145.99998f, performance.getRunningGainOrLoss());
+        assertEquals(0, performance.getCurNumShares());
+
+    }
 }
